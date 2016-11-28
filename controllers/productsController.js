@@ -1,4 +1,7 @@
-/*var Product = require('../models/Product.js');
+var Product = require('../models/Product.js');
+
+/*
+var Product = require('../models/Product.js');
 
 exports.findAllProducts = function(req,res){
 	//res.send('find all');
@@ -41,15 +44,40 @@ exports.deleteProduct = function(req,res){
 */
 
 exports.findAllProducts = function(req, res) {
- 	res.send('Find All');
+ 	console.log('Get all Products')
+ 	
+ 	Product.find(function(error,productList){
+
+ 		if (error) {
+ 			res.send(500,error.message);
+ 		}
+
+ 		res.status(200).jsonp(productList);
+ 	})
  };
  
+
  exports.findById = function(req, res) {
  	res.send('findById');
  };
  
  exports.addProduct = function(req, res) {
- 	res.send('Add Product');
+ 	console.log(req.body);
+
+	var product = new Product({
+		name: req.body.name,
+		photo: req.body.photo,
+		description: req.body.description,
+		stock: req.body.stock
+	});
+
+	product.save(function(error, product) {
+		if(error) {
+			res.send(500, error.message);
+		}
+
+		res.status(200).jsonp(product);
+	});
  };
  
  exports.updateProduct = function(req, res) {

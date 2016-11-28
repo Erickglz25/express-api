@@ -21,6 +21,16 @@ db.once('open', function() {
 })
 */
 
+mongoose.connect('mongodb://localhost/products');
+
+var db = mongoose.connection;
+
+db.on('error', console.log.bind(console, 'connection error:'));
+
+db.once('open', function() {
+  console.log('Connection Success');
+})
+
 
 
 
@@ -40,13 +50,14 @@ products.route('/products')
 
 products.route('/products/:id')
 .get(productsController.findById)
+.put(productsController.updateProduct)
 .post(productsController.updateProduct);
 
 
 app.set('port',3000);
 
 
-var server =app.listen(3000, function(){
+var server = app.listen(3000, function(){
 
 	console.log('Express server listening in port' + server.address.port)
 });
